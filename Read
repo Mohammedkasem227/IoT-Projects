@@ -1,0 +1,57 @@
+#include "thingProperties.h"
+
+
+// Code for Gas Sensor
+#define MQ2pin (0)
+float sensorValue;  //variable to store sensor value
+
+
+// End code fo Gas Sensor
+
+void setup() {
+  // Initialize serial and wait for port to open:
+  Serial.begin(9600);
+  // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
+  delay(1500);
+
+  // Defined in thingProperties.h
+  initProperties();
+
+  // Connect to Arduino IoT Cloud
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection);
+
+  setDebugMessageLevel(2);
+  ArduinoCloud.printDebugInfo();
+  
+}
+
+void loop() {
+  ArduinoCloud.update();
+  
+  // Code for Gas Sensor-------------------------------------------------
+  sensorValue = analogRead(MQ2pin); // read analog input pin 0
+  
+  Serial.print("Sensor Value: ");
+  Serial.print(sensorValue);
+  
+  gasSensorValue = sensorValue;
+  
+  
+  if(sensorValue > 200)
+  {
+    Serial.print(" | Smoke detected!");
+    message = " | Smoke detected!" ;
+    
+  } else {
+    Serial.print(" Clear ");
+    message = " Clear" ;
+  }
+  // End code fo Gas Sensor-------------------------------------------------
+
+  
+  Serial.println("");
+  delay(1000); // wait 1s for next reading
+
+}
+
+
